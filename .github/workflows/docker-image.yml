@@ -13,9 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag netapp:$(date +%s)
-
+    
     - name: Azure Container Registry Login
       uses: Azure/docker-login@v1
       with:
@@ -25,5 +23,10 @@ jobs:
         password: ${{ secrets.ACRPASSWORD }}
         # Container registry server url
         login-server: ${{ secrets.ACRLOGINSERVER }}
-    - name: Push the Docker image
-      run:  docker push ${{ secrets.ACRLOGINSERVER }}/netapp:$(date +%s)
+        
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag netapp:$(date +%s)
+           docker push ${{ secrets.ACRLOGINSERVER }}/netapp:$(date +%s)
+
+
+
