@@ -16,16 +16,16 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 
-  #ConnectAcr:
-  #  name: Connect
-  #  needs: Build
-  #  steps:
-  #  - name: Azure Container Registry Login
-  #    uses: Azure/docker-login@v1
-  #    with:
-  #      # Container registry username
-  #      username:  ${{ secrets.ACRUSERNAME }}
-  #      # Container registry password
-  #      password: ${{ secrets.ACRPASSWORD }}
-  #      # Container registry server url
-  #      login-server: ${{ secrets.ACRLOGINSERVER }}
+  Build2:
+    name: Connect
+    needs: Build
+    steps:
+    - name: Azure Container Registry Login
+      uses: Azure/docker-login@v1
+      with:
+        # Container registry username
+        username:  ${{ secrets.ACRUSERNAME }}
+        # Container registry password
+        password: ${{ secrets.ACRPASSWORD }}
+        # Container registry server url
+        login-server: ${{ secrets.ACRLOGINSERVER }}
