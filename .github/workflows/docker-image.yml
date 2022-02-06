@@ -25,7 +25,8 @@ jobs:
         login-server: ${{ secrets.ACRLOGINSERVER }}
         
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag netapp:$(date +%s)
+      run: | 
+           docker build . --file Dockerfile --tag netapp:$(date +%s)
            docker push ${{ secrets.ACRLOGINSERVER }}/netapp:$(date +%s)
 
 
