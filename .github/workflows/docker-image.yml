@@ -29,5 +29,15 @@ jobs:
            docker build . -t ${{ secrets.ACRLOGINSERVER }}/netapp:${{ github.sha }}
            docker push ${{ secrets.ACRLOGINSERVER }}/netapp:${{ github.sha }}
 
-
+    - name: 'Deploy to Azure Container Instances'
+      uses: 'azure/aci-deploy@v1'
+      with:
+            resource-group: ${{ secrets.ACRRG }}
+            dns-name-label: ${{ secrets.ACRRG }}${{ github.run_number }}
+            image: ${{ secrets.ACRLOGINSERVER }}/netapp:${{ github.sha }}
+            registry-login-server: ${{ secrets.ACRLOGINSERVER }}
+            registry-username: ${{ secrets.ACRUSERNAME }}
+            registry-password: ${{ secrets.ACRPASSWORD }}
+            name: containerdemo
+            location: 'francecentral'
 
