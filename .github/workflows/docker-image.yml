@@ -36,17 +36,19 @@ jobs:
       uses: aquasecurity/trivy-action@master
       with:
           image-ref: ${{ secrets.ACRLOGINSERVER }}/netapp:${{ github.sha }}
-          output: 'trivy-results.sarif'
-          format: 'table'
+
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
-          
+          output: 'results.sarif'
+           
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v1
       with:
-          sarif_file: 'trivy-results.sarif'     
+          sarif_file: 'results.sarif'     
           
     - name: Push the Docker image
       run: docker push ${{ secrets.ACRLOGINSERVER }}/netapp:${{ github.sha }} 
