@@ -26,8 +26,8 @@ jobs:
         
     - name: Build the Docker image
       run: | 
-           docker build . -t ${{ secrets.ACRLOGINSERVER }}/netapp:$(date +%s)
-           docker push ${{ secrets.ACRLOGINSERVER }}/netapp:$(date +%s)
+           docker build . -t ${{ secrets.ACRLOGINSERVER }}/netapp
+           docker push ${{ secrets.ACRLOGINSERVER }}/netapp
 
 
 
