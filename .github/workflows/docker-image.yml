@@ -32,7 +32,26 @@ jobs:
       run: | 
            docker build . -t ${{ secrets.ACRLOGINSERVER }}/netapp:${{ github.sha }}
            docker push ${{ secrets.ACRLOGINSERVER }}/netapp:${{ github.sha }}
-
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+          image-ref: ${{ secrets.ACRLOGINSERVER }}/netapp:${{ github.sha }}
+          output: 'trivy-results.sarif'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+          
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v1
+      if: always() 
+      with:
+          sarif_file: 'trivy-results.sarif'     
+          
+    - name: Push the Docker image
+      run: docker push ${{ secrets.ACRLOGINSERVER }}/netapp:${{ github.sha }} 
+               
     - name: 'Deploy to Azure Container Instances'
       uses: 'azure/aci-deploy@v1'
       with:
